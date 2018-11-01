@@ -1,34 +1,19 @@
 ---
-title: Step by step TDD of a Golang Web Application - Part 1
+title: Step by step TDD of a Golang Web Application - Part 2
 ---
 
-## Test-driving a Go Web Application
+### Growing the Back-end Server Application through Tests
 
-Inspired by the article by Soham Kamani on [how to build a web application in
-Go](https://www.sohamkamani.com/blog/2017/09/13/how-to-build-a-web-application-in-golang/),
-I decided to build the same application, but using a test-driven-development
-(TDD) approach. I wanted to see how this technique influences the design of the
-code and its maintainability.
-
-This simple application allows a user to construct a list of birds, consisting
-of a bird's species and description, displayed on a web page. The bulk of the
-logic is contained in a server component which provides an API for listing and
-adding birds using a JSON REST interface. Birds are stored in a postgres
-database. The user interface is contained in a single-page web application,
-served by the same web server used for the REST API.
-
-### First steps
-
-We'll employ a top-down approach to driving out this application, starting at a
-system test. This will start up the REST API server, check that an initial GET
-on the /birds endpoint returns an empty JSON list, then add some birds by
-sending POST requests to /birds, and finally verify that a GET to /birds
-returns a JSON list of the added birds.
+We'll employ a top-down approach to driving out this back-end application,
+starting at a system test. This will start up the REST API server, check that
+an initial GET on the /birds endpoint returns an empty JSON list, then add some
+birds by sending POST requests to /birds, and finally verify that a GET to
+/birds returns a JSON list of the added birds.
 
 We'll be using [ginkgo](https://github.com/onsi/ginkgo) and
-[gomega](https://github.com/onsi/gomega) for a BDD testing framework. You'll
-need to `go get` these first if you want to code along and don't have them
-already. Then we'll let ginkgo create the test file:
+[gomega](https://github.com/onsi/gomega) again for the back-end testing. `go
+get` the packages if you haven't already from the end-to-end test, then we'll
+let ginkgo create the test file:
 
 ```bash
 $ mkdir -p system_tests/api

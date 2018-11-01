@@ -1,0 +1,19 @@
+sequenceDiagram
+
+User ->> Browser : navigate to URL
+
+Browser ->> +Web Server : GET /
+Web Server -->> -Browser : birds app
+activate Browser
+
+Browser ->> +API Server : GET /birds
+API Server ->> +Data store : get birds
+Data store -->> -API Server : birds
+API Server -->> -Browser : bird list
+
+User ->> Browser : Submit bird details
+Browser ->> +API Server : POST /birds
+API Server ->> +Data store : insert bird
+Data store -->> -API Server : ok
+API Server -->> -Browser : HTTP Created
+deactivate Browser
