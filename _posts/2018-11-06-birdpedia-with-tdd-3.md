@@ -1,3 +1,7 @@
+---
+title: Step by step TDD of a Golang Web Application - Part 3
+---
+
 ## Driving out the first of the details
 
 The level of testing below system testing is integration testing. In our
@@ -19,9 +23,9 @@ $ (cd integration_tests/api; ginkgo bootstrap; ginkgo generate birds)
 
 Since we can control the database layer through fakes, we can start with an
 integration test checking the listing of birds via the GET request to /birds.
-We can use the httptest package from the standard library to quickly spin up a
-mock HTTP server. This requires an http.Handler in its constructor, and here
-the idea is to use the gorilla/mux Router. As this doesn't yet exist, we can't
+We can use the `httptest` package from the standard library to quickly spin up a
+mock HTTP server. This requires an `http.Handler` in its constructor, and here
+the idea is to use the `gorilla/mux` Router. As this doesn't yet exist, we can't
 write a test that will compile. Also, we don't yet know the interface for the
 database layer, so we can't construct a fake. I've left a comment for now.
 
@@ -81,7 +85,7 @@ var _ = Describe("Birds", func() {
 })
 ```
 
-Our first job is to make this compile by returning a gorilla/mux Router in the routing.NewRouter() function.
+Our first job is to make this compile by returning a `gorilla/mux` Router in the `routing.NewRouter()` function.
 
 *routing/routes.go:*
 
@@ -99,10 +103,15 @@ func NewRouter() http.Handler {
 }
 ```
 
+You will need to grab the `gorilla/mux` package at this point. If you're using _dep_,
+a `dep init` and a `dep ensure` should be sufficient.
+
 Now our test compiles, but it fails with a HTTP 404 error when performing a GET
 request on the /birds endpoint. There are clearly a number of implementation
 details that need to be written before this integration test will pass.
 We'll dive down to the unit test level to drive out this implementation.
+
+### Diving deeper into unit tests
 
 The integration test is failing at this router component, so this seems the
 sensible place to start with a unit test. We need it to respond correctly to a
@@ -204,8 +213,9 @@ To generate the fake struct after creating this file, run the following in a she
 $ go generate ./...
 ```
 
-Then we add a test where we inject a fake handler into the router and stub out
-the GetBirds method, and check the response. The full test file is shown below.
+Then we add a test where we inject a fake handler into the router, stubbing out
+the `GetBirds()` method, and check the response. The full test file is shown
+below.
 
 *routing/routing_test.go:*
 

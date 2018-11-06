@@ -192,6 +192,13 @@ are shown below.
 
 ![sequenceDiagram](/assets/high-level.svg)
 
+Here we're showing a user requesting the application from a web server. This
+loads in the browser (represented by the long box in the browser line),
+initialising itself by fetching the bird list from the API server, which
+retrieves it from the database.  When the user fills in some new bird details
+in the application, this posts the details to the API server, updating the
+database. That's the full extend of the application for now.
+
 ### Summary
 
 At this stage, we have an acceptance test which exercises the front-end of our

@@ -10,6 +10,10 @@ an initial GET on the /birds endpoint returns an empty JSON list, then add some
 birds by sending POST requests to /birds, and finally verify that a GET to
 /birds returns a JSON list of the added birds.
 
+This may seem very much like the end-to-end test written in the previous post,
+but we're removing the complexities of the front-end application for this
+system test and driving the back-end directly using its REST API.
+
 We'll be using [ginkgo](https://github.com/onsi/ginkgo) and
 [gomega](https://github.com/onsi/gomega) again for the back-end testing. `go
 get` the packages if you haven't already from the end-to-end test, then we'll
@@ -22,9 +26,10 @@ $ (cd system_tests/api; ginkgo bootstrap; ginkgo generate birds)
 
 A common ginkgo pattern for system-testing a server is to build the server
 application in the test suite, and to provide a path to the generated binary
-for the tests to use. So for our first failing test, let's build the
-application in package birds/cmd/server and have a simple test to check it can
-be run successfully.
+for the tests to use. Each test starts and stops its own copy of the server for
+good test isolation. So for our first failing test, let's build the application
+in package `birds/cmd/server` and have a simple test to check it can be run
+successfully.
 
 *system_tests/api/api_test_suite.go:*
 

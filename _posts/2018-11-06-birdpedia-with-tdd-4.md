@@ -1,3 +1,7 @@
+---
+title: Step by step TDD of a Golang Web Application - Part 4
+---
+
 ## Completing the list birds functionality
 
 ### Birds Handler
@@ -13,7 +17,7 @@ $ (cd handlers; ginkgo bootstrap; ginkgo generate)
 
 Here's a minimally failing test for the handler, which doesn't yet compile.
 
-> handlers/handlers_test.go
+*handlers/handlers_test.go*
 
 ```go
 package handlers_test
@@ -49,7 +53,7 @@ var _ = Describe("Handlers", func() {
 
 To make it compile, we must add the handler code.
 
-> handlers/birds.go
+*handlers/birds.go*
 
 ```go
 package handlers
@@ -75,12 +79,12 @@ that bird data from? Its responsibility is purely to get the data and write it
 in the correct format. So again we've found the need for a new component to do
 with data storage.
 
-Let's create another interface called BirdStorage, with a GetBirds method
-returning a slice of Birds. While we're at it, we must also define that Bird
+Let's create another interface called `BirdStorage`, with a `GetBirds()` method
+returning a slice of `Bird`s. While we're at it, we must also define that `Bird`
 struct with species and description properties. Then we can inject an object of
 the interface into the birds handler, and fake it in the unit test.
 
-> handlers/interfaces.go
+*handlers/interfaces.go*
 
 ```go
 package handlers
@@ -94,7 +98,7 @@ type BirdStorage interface {
 }
 ```
 
-> bird.go
+*bird.go*
 
 ```go
 package birds
@@ -108,7 +112,7 @@ type Bird struct {
 Once the fake is generated, we can modify the unit test, using it to set up the
 expected data.
 
-> handlers/handlers_test.go
+*handlers/handlers_test.go*
 
 ```go
 package handlers_test
@@ -156,10 +160,10 @@ var _ = Describe("Handlers", func() {
 })
 ```
 
-Finally, we add the data store parameter to the NewHandler function, and use it
-within the GetBirds method to make the test compile and then pass.
+Finally, we add the data store parameter to the `NewHandler()` function, and use it
+within the `GetBirds()` method to make the test compile and then pass.
 
-> handlers/birds.go
+*handlers/birds.go*
 
 ```go
 package handlers
@@ -187,10 +191,10 @@ func (b *Birds) GetBirds(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-Since the GetBirds method might also return an error, we should create a test for
+Since the `GetBirds()` method might also return an error, we should create a test for
 that. Let's make the handler return an HTTP 500 error in this case.
 
-> handlers/handlers_test.go
+*handlers/handlers_test.go*
 
 ```go
 	// ...
@@ -206,7 +210,7 @@ that. Let's make the handler return an HTTP 500 error in this case.
 
 To make this pass, we deal with the returned error in the handler.
 
-> handlers/birds.go
+*handlers/birds.go*
 
 ```go
 // ...
@@ -239,7 +243,7 @@ There isn't much we can test at the moment. We must check that GetBirds returns
 the expected list, but since we don't yet have a mechanism for adding birds to the store,
 all we can check is that the store returns an empty slice of birds.
 
-> data/data_test.go
+*data/data_test.go*
 
 ```go
 package data_test
@@ -275,7 +279,7 @@ var _ = Describe("Data", func() {
 We can create a simple in-memory data store to make this test pass. Later we
 can substitute it for a postgres data store with the same interface.
 
-> /data/store.go
+*/data/store.go*
 
 ```go
 package data
@@ -306,7 +310,7 @@ data store.  This is more than enough (as we will fake the data store) for
 making our integration test green. So let's modify the integration test to set
 up the real components, fake the data store, and see if it now passes.
 
-> integration_tests/birds_test.go
+*integration_tests/birds_test.go*
 
 ```go
 package api_test
