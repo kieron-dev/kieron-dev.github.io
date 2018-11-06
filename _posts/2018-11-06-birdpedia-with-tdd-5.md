@@ -1,3 +1,7 @@
+---
+title: Step by step TDD of a Golang Web Application - Part 5
+---
+
 ## Adding birds
 
 We now need an integration test for adding a bird with a POST request to the
@@ -9,7 +13,7 @@ existing structs and interfaces.
 Like the integration test for listing birds, the area under test will be from
 the router up to the data store. We'll fake the web server and the data store.
 
-> integration_tests/birds_test.go
+*integration_tests/birds_test.go*
 
 ```go
 	// ...
@@ -34,11 +38,11 @@ the router up to the data store. We'll fake the web server and the data store.
 ```
 
 Here we test that the POST request ends up with the corresponding data being
-sent to an AddBird method I've just invented for the BirdStorage interface.
-We can make the test compile by extending the interface and regenerating the
-fake code.
+sent to an `AddBird()` method I've just invented for the `BirdStorage`
+interface.  We can make the test compile by extending the interface and
+regenerating the fake code.
 
-> handlers/interfaces.go
+*handlers/interfaces.go*
 
 ```go
 // ...
@@ -54,7 +58,7 @@ allowed error.
 
 So let's dive down to the unit tests, starting at the router.
 
-> routing/routing_test.go
+*routing/routing_test.go*
 
 ```go
 	// ...
@@ -73,14 +77,14 @@ So let's dive down to the unit tests, starting at the router.
 	})
 ```
 
-Here we've imagined a new method on the handler, AddBird, and we check it's
-called once. We need to add the method to the BirdsHandler interface, regenerate
-the fakes code, and then the test will compile.
+Here we've imagined a new method on the handler, `AddBird(),` and we check it's
+called once. We need to add the method to the `BirdsHandler` interface,
+regenerate the fakes code, and then the test will compile.
 
 To make it pass, we need to add the route for a POST to /birds and attach the
 handler method.
 
-> routing/routes.go
+*routing/routes.go*
 
 ```go
 // ...
@@ -96,7 +100,7 @@ func NewRouter(handler BirdsHandler) http.Handler {
 Now we can move on to the handler which needs a method to fully implement its
 interface. We'll write a unit test for this new AddBird method.
 
-> handlers/handlers_test.go
+*handlers/handlers_test.go*
 
 ```go
 	// ...
@@ -125,7 +129,7 @@ To make this compile, we need to create the AddBird method on the handler.
 Then by grabbing the form properties, constructing a Bird and calling the
 AddBird method on the data store with it, we make the test pass.
 
-> handlers/birds.go
+*handlers/birds.go*
 
 ```go
 func (b *Birds) AddBird(w http.ResponseWriter, r *http.Request) {
@@ -145,12 +149,12 @@ There are a couple of error cases which we should test for here. First, the
 submitted data might be imcomplete. We should require that species is a
 non-empty string. Description can be optional.  Secondly, the data store might
 return an error when adding the bird. For example if there is a database
-connection problem.  So the error return value from dataStore.AddBird should be
-checked.
+connection problem.  So the error return value from `dataStore.AddBird()`
+should be checked.
 
 Here are the new tests.
 
-> handlers/handlers_test.go
+*handlers/handlers_test.go*
 
 ```go
 	It("returns error code 400 and does not call the data store when species is not sent", func() {
@@ -184,7 +188,7 @@ Here are the new tests.
 
 Here is the handler code.
 
-> handlers/birds.go
+*handlers/birds.go*
 
 ```go
 // ...
@@ -218,7 +222,7 @@ any work on the data store. If you run them now, you can verify they do pass.
 With some work on the in-memory data store we should be able to make the system
 test pass too, so let's do that now.
 
-> data/data_test.go
+*data/data_test.go*
 
 ```go
 	// ...
@@ -241,7 +245,7 @@ test pass too, so let's do that now.
 
 Here is the code to make this pass.
 
-> data/store.go
+*data/store.go*
 
 ```go
 // ...
@@ -255,7 +259,7 @@ func (s *Store) AddBird(bird birds.Bird) error {
 For completeness, we should try adding more than one bird and checking the
 state of the bird list.
 
-> data/data_test.go
+*data/data_test.go*
 
 ```go
 	// ...
@@ -290,11 +294,11 @@ That passes without modification, but we at least avoid the error of
 implementing AddBird like `s.birds = []birds.Bird{bird}`.
 
 So now all our unit and integration tests are passing. We should focus again on
-the system test.  This is running the cmd/api package which we've not touched
+the system test.  This is running the `cmd/api` package which we've not touched
 since the beginning. This will need to create and inject our discovered
 components into the main command - code which is currently missing.
 
-> cmd/api/main.go
+*cmd/api/main.go*
 
 ```go
 package main
@@ -320,7 +324,7 @@ Now we can run the system test. Unfortunately, we seem to have missed the
 Content-Type of the GetBirds response.  We should be checking this in the
 integration test, so let's add it.
 
-> integration_tests/api/birds_test.go
+*integration_tests/api/birds_test.go*
 
 ```go
 	// ...
@@ -347,7 +351,7 @@ integration test, so let's add it.
 This should be dealt with in the handler, so let's add this to a unit test
 there.
 
-> handlers/handlers_test.go
+*handlers/handlers_test.go*
 
 ```go
 	It("writes a bird list as JSON to the response writer", func() {
@@ -371,7 +375,7 @@ there.
 Then setting the header in the handler code makes the unit and integration test
 pass.
 
-> handlers/birds.go
+*handlers/birds.go*
 
 ```go
 func (b *Birds) GetBirds(w http.ResponseWriter, r *http.Request) {
@@ -387,11 +391,11 @@ func (b *Birds) GetBirds(w http.ResponseWriter, r *http.Request) {
 ```
 
 Now the system test is failing because of a property ordering problem in the
-JSON output.  The system test was written before we had the birds.Bird struct.
-We can change the test to use this struct to generate the expected JSON, then
-it passes!
+JSON output.  The system test was written before we had the `birds.Bird`
+struct.  We can change the test to use this struct to generate the expected
+JSON, then it passes!
 
-> system_tests/api/birds_test.go
+*system_tests/api/birds_test.go*
 
 ```go
 		// ...
