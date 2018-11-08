@@ -1,5 +1,6 @@
 ---
 title: Step by step TDD of a Golang Web Application - Part 5
+tags: [tutorial, tdd, birdpedia]
 ---
 
 ## Adding birds

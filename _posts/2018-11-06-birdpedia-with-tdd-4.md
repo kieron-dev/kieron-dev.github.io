@@ -1,5 +1,6 @@
 ---
 title: Step by step TDD of a Golang Web Application - Part 4
+tags: [tutorial, tdd, birdpedia]
 ---
 
 ## Completing the list birds functionality
@@ -371,4 +372,5 @@ var _ = Describe("Birds", func() {
 
 This does indeed now pass. So that's it for the listing birds side of the
 integration tests.  Our system test still won't pass, as we haven't addressed
-adding birds to the list yet. So that integration test is the next to write.
+adding birds to the list yet. So that integration test is the [next to
+write]({{ site.baseurl }}{% post_url 2018-11-06-birdpedia-with-tdd-5 %}).

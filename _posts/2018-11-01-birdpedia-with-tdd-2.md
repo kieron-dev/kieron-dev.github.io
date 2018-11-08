@@ -1,5 +1,6 @@
 ---
 title: Step by step TDD of a Golang Web Application - Part 2
+tags: [tutorial, tdd, birdpedia]
 ---
 
 ### Growing the Back-end Server Application through Tests
@@ -243,4 +244,5 @@ At this point we can't simply make this test pass. We need handlers for GET and
 POST requests, and these must interact with some data source. It's time to
 leave this test red, and dive down a testing layer to drive out the
 implementation. When the lower level tests are green, we expect this test to
-also pass.
+also pass. See the [next post]({{ site.baseurl }}{% post_url
+2018-11-06-birdpedia-with-tdd-3 %}) for details.

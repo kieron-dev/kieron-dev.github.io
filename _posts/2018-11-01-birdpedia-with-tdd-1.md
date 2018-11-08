@@ -1,5 +1,6 @@
 ---
 title: Step by step TDD of a Golang Web Application - Part 1
+tags: [tutorial, tdd, birdpedia]
 ---
 
 ## Test-driving a Go Web Application
@@ -208,4 +209,5 @@ that we need to build a couple of distinct components - the front-end web
 application, and the back-end API server / web server.
 
 For no particular reason, let's start with the back-end work and we'll see how
-we test-drive that in the next post.
+we test-drive that in the [next post]({{ site.baseurl }}{% post_url
+2018-11-01-birdpedia-with-tdd-2 %}).

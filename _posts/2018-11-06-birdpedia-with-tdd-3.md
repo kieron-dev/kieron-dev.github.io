@@ -1,5 +1,6 @@
 ---
 title: Step by step TDD of a Golang Web Application - Part 3
+tags: [tutorial, tdd, birdpedia]
 ---
 
 ## Driving out the first of the details
@@ -304,4 +305,5 @@ func NewRouter(handler BirdsHandler) http.Handler {
 This is it for the routing code for the time being. The integration test is
 currently not compiling, as the NewRouter function requires a real handler as a
 parameter now. Both this and the new interface without a real implementation
-point us towards the handler as the next area of work.
+point us towards the handler as the [next area of work]({{ site.baseurl }}{%
+post_url 2018-11-06-birdpedia-with-tdd-4 %}).
