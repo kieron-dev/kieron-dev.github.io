@@ -340,3 +340,7 @@ implements the Logger interface. This integrates with the gomega
         Expect(logger).To(gbytes.Say("my-special-message"))
     })
 ```
+
+### Source code from this post
+
+See the commits on [github](https://github.com/kieron-pivotal/lager-o-clock).
